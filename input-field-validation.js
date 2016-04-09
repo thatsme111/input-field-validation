@@ -8,10 +8,13 @@ window.Validation = new (function(){
 			var elements = document.querySelectorAll("[validation-"+register.name+"]");
 			for(i=0; i<elements.length; i++){
 				var rule = elements[i].getAttribute("validation-"+register.name);
-				if(Validation.Rule[rule](elements[i])){
-					var message = elements[i].getAttribute("validation-message");
-					console.log(message);
-				}					
+				var RuleExecuter = {
+					"execute": Validation.Rule[rule],
+					"message": elements[i].getAttribute("validation-message")
+				};
+				if(RuleExecuter.execute(elements[i])){
+					console.log(RuleExecuter.message);
+				}
 			}
 		});
 	};
@@ -31,10 +34,11 @@ addEventListener("DOMContentLoaded", function(){
 });
 
 // add validation rules
-// process or arguments
 window.Validation.addRule("empty", function(element){
-	if(element.value == "")
+	if(element.value == ""){
+		this.message = "This is improtatnt field which cannot be empty"
 		return true;
+	}
 	else
 		return false;
-});
+});	
